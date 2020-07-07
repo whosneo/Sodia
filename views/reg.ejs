@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head.ejs %>
+</head>
+<body>
+<div class="container col-md-3">
+
+    <div class="text-center" id="offline_div" style="display: none;">You are offline now.</div>
+
+    <form class="text-center" id="regForm">
+        <a href="/" title="Sodia">
+            <img class="mb-4" src="/images/icons/icon-256x256.png" alt="" width="72" height="72">
+            <h3 class="mb-3">Welcome to Sodia</h3>
+        </a>
+        <% if (message && message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        <input type="email" name="email" id="email" class="form-control mb-2" placeholder="Email" required autofocus>
+        <input type="text" name="user_id" id="user_id" class="form-control mb-2" placeholder="User ID" required>
+        <input type="text" name="nickname" id="nickname" class="form-control mb-2" placeholder="Nickname" required>
+        <input type="password" name="password" autocomplete="new-password" id="password" class="form-control mb-2"
+               placeholder="Password" required>
+        <input type="password" name="passwordAgain" autocomplete="new-password" id="passwordAgain"
+               class="form-control mb-2" placeholder="Confirm Password" required>
+        <button class="btn btn-lg btn-primary btn-block mt-3" onclick="reg()">Register</button>
+        <p class="mt-3">Already have an account? <a href="/login">Login now.</a></p>
+    </form>
+
+</div>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+<% include partials/modal.ejs %>
+</body>
+</html>

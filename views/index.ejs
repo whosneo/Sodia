@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head.ejs %>
+</head>
+<body onload="initSodia();<%= (user && typeof home != 'undefined') ? 'showSavedStories();' : '' %>">
+<header>
+    <% include partials/navbar.ejs %>
+</header>
+<div class="container col-md-6">
+
+    <div class="text-center" id="offline_div" style="display: none;">You are offline now.</div>
+
+    <% if (message && message.length > 0) { %>
+        <div class="alert alert-danger text-center mt-4"><%= message %></div>
+    <% } %>
+
+    <% if (typeof avatar != 'undefined') { %>
+        <div class="text-center">
+            <img class="mt-4 mb-2 rounded-circle" src="/images/avatars/<%= showUser.local.user_id %>" alt="" width="128"
+                 height="128">
+            <h3 class="mb-3"><%= showUser.local.name %> @<%= showUser.local.user_id %></h3>
+        </div>
+    <% } %>
+
+    <% if (user && typeof home != 'undefined') { %>
+        <div class="mt-3">
+            <button class="btn btn-outline-primary" style="opacity: 0;cursor: default;" disabled>Catch me!</button>
+            <button class="btn btn-outline-primary" onclick="recommend()" style="float: right;">Recommendations</button>
+        </div>
+    <% } %>
+
+    <div id="stories">
+        <% stories.forEach(story => { %>
+            <div class="mt-5 p-4 rounded shadow-lg" id="<%= story._id %>">
+                <div style="display: flex;">
+                    <div>
+                        <a href="/users/<%= story.user.local.user_id %>">
+                            <img class="mr-2 rounded-circle" src="/images/avatars/<%= story.user.local.user_id %>"
+                                 width="64" height="64">
+                        </a>
+                    </div>
+                    <div>
+                        <div>
+                            <a href="/users/<%= story.user.local.user_id %>" style="color: inherit;">
+                                <strong><%= story.user.local.name %> @<%= story.user.local.user_id %></strong>
+                            </a>
+                        </div>
+                        <div style="color: grey;"><%= story.date.toLocaleString() %></div>
+                        <div class="my-1" style="font-size: 18px;word-break: break-word;"><%= story.text %></div>
+                        <div>
+                            <% story.pictures.forEach(picture => { %>
+                                <img style="max-width: 100%;margin: 5px;" src="/images/pictures/<%= picture %>">
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3" style="border-top: 1px solid #ccc;">
+                    <% if (user) { %>
+                        <button class="btn btn-outline-primary" onclick="voteModal('<%= story._id %>')">Vote</button>
+                    <% } %>
+                    <button class="btn btn-outline-primary" style="opacity: 0;cursor: default;" disabled>Catch me!</button>
+                    <% if (typeof show == 'undefined') { %>
+                        <a class="btn btn-outline-success ml-1" href="/stories/<%= story._id %>"
+                           style="float: right;">View</a>
+                    <% } %>
+                    <% if (user && user._id.toString() == story.user._id.toString()) { %>
+                        <button class="btn btn-outline-danger" onclick="confirmAction(del, '<%= story._id %>')"
+                                style="float: right;">
+                            Delete
+                        </button>
+                    <% } %>
+                </div>
+                <% if (typeof show != 'undefined') { %>
+                    <div class="mt-3 pt-3" id="voteDiv" style="border-top: 1px solid #ccc;">
+                        <% story.votes.forEach(record => { %>
+                            <div style="white-space: nowrap;display: inline;">
+                                <%= record.user.local.name %> <%= record.vote.star %> ⭐
+                            </div>️
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+        <% }) %>
+    </div>
+
+</div>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+<% include partials/modal.ejs %>
+<% if (typeof home != 'undefined') { %>
+    <script>
+        const socket = io('/');
+        socket.on('new', story => showStory(story, true));
+    </script>
+<% } else if (typeof avatar != 'undefined') { %>
+    <script>
+        const socket = io('/');
+        socket.on('new', story => {
+            if (story.user._id.toString() === '<%= showUser._id.toString() %>')
+                showStory(story, true, false);
+        });
+    </script>
+<% } %>
+</body>
+</html>

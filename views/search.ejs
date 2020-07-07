@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head.ejs %>
+</head>
+<body onload="initSodia()">
+<header>
+    <% include partials/navbar.ejs %>
+</header>
+<div class="container col-md-6">
+
+    <div class="text-center" id="offline_div" style="display: none;">You are offline now.</div>
+
+    <form class="mt-5" style="display: flex;">
+        <input id="searchBox" class="form-control mr-2" style="width: 100%;" type="text" placeholder="Search"
+               aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" onclick="search()">🔍</button>
+    </form>
+
+    <div id="stories"></div>
+
+</div>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+<% include partials/modal.ejs %>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head.ejs %>
+</head>
+<body onload="initSodia()">
+<header>
+    <% include partials/navbar.ejs %>
+</header>
+<div class="container col-md-6">
+
+    <div class="text-center" id="offline_div" style="display: none;">You are offline now.</div>
+
+    <form class="form-group" id="storyForm" style="text-align: right;">
+        <label for="new_story"></label>
+        <textarea class="form-control mb-3" rows="5" id="new_story" name="new_story" placeholder="Share your story"
+                  maxlength="150"></textarea>
+        <p style="color: grey;"><span id="limit">150</span> / 150</p>
+        <p style="text-align: left;">You can choose up to 3 pictures to upload.</p>
+        <input type="file" name="pictures" id="pictures" multiple accept="image/*" class="form-control mb-2" onchange="convertFiles()">
+        <button type="submit" class="btn btn-primary" onclick="newStory()">Post</button>
+    </form>
+
+</div>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+<% include partials/modal.ejs %>
+<script>
+    const socket = io('/');
+
+    $('textarea[maxlength]').bind('input propertychange', () => {
+        var maxLength = $(this).attr('maxlength');
+        if ($(this).val().length > maxLength) {
+            $(this).val($(this).val().substring(0, maxLength));
+        }
+        $('#limit').text(maxLength - $(this).val().length);
+    });
+</script>
+</body>
+</html>

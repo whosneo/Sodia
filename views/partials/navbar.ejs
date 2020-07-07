@@ -1,0 +1,35 @@
+<nav class="navbar <%= user ? 'navbar-expand-md' : 'navbar-expand' %> navbar-light bg-light">
+    <a class="navbar-brand  mr-auto" href="/" title="Sodia">Sodia</a>
+    <% if (user) { %>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    <% } %>
+
+    <div class="collapse navbar-collapse text-right" id="navbarMenu">
+        <ul class="navbar-nav" style="width: 100%;">
+            <li class="nav-item mt-2 mt-md-0 <%= user ? 'ml-md-auto' : 'ml-auto' %>">
+                <a class="btn btn-block btn-primary" href="/search" title="Search">Search</a>
+            </li>
+            <% if (user) { %>
+            <li class="nav-item mt-2 mt-md-0 ml-0 ml-md-1">
+                <a class="btn btn-block btn-success" href="/stories/new" title="New Story">New Story</a>
+            </li>
+            <li class="nav-item mt-2 mt-md-0 ml-0 ml-md-1">
+                <a class="btn btn-block btn-danger" href="/users/<%= user.local.user_id %>" title="My">My</a>
+            </li>
+            <li class="nav-item mt-2 mt-md-0 ml-0 ml-md-1">
+                <a class="btn btn-block btn-warning" href="/users/settings" title="Settings">Settings</a>
+            </li>
+            <li class="nav-item mt-2 mt-md-0 ml-0 ml-md-1">
+                <button class="btn btn-block btn-secondary" onclick="logout()">Logout</button>
+            </li>
+            <% } else { %>
+                <li class="nav-item mt-2 mt-md-0 ml-1">
+                    <button class="btn btn-block btn-success" onclick="showLoginModal()">Login</button>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
